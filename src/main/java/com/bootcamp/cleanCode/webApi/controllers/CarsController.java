@@ -13,40 +13,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bootcamp.cleanCode.business.abstracts.ModelService;
-import com.bootcamp.cleanCode.entities.Model;
+import com.bootcamp.cleanCode.business.abstracts.CarService;
+import com.bootcamp.cleanCode.entities.Car;
 
 import lombok.AllArgsConstructor;
+
 @RestController
-@RequestMapping("/api/models")
+@RequestMapping("/api/cars")
 @AllArgsConstructor
-public class ModelsController {
-    private ModelService modelService;
+public class CarsController {
+    private CarService carService;
 
     @GetMapping("getall")
-    public List<Model> getAll() {
-        return modelService.getAll();
+    public List<Car> getAll() {
+        return carService.getAll();
     }
 
     @GetMapping("/getbyid/{id}")
-    public Model getById(@PathVariable int id) {
-        return modelService.getById(id);
+    public Car getById(@PathVariable int id) {
+        return carService.getById(id);
     }
 
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void add(@RequestBody() Model model) {
-        this.modelService.add(model);
+    public void add(@RequestBody() Car car) {
+        this.carService.add(car);
 
     }
     @PutMapping("/update/{id}")
-    public Model updateModel(@PathVariable int id, @RequestBody() Model updatedModel){
-        return modelService.update(id, updatedModel);
+    public Car updateCar(@PathVariable int id, @RequestBody() Car updatedCar){
+        return carService.update(id, updatedCar);
     }
 
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable int id) {
-        this.modelService.deleteById(id);
+        this.carService.deleteById(id);
     }
     
 }
