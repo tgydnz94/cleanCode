@@ -34,7 +34,7 @@ public class ModelManager implements ModelService {
     @Override
     public Model update(int id, Model updatedModel) {
         Model model = modelRepository.findById(id)
-                        .orElseThrow(()-> new RuntimeException("Brand not found with id:"+id));
+                        .orElseThrow(()-> new RuntimeException("Model not found with id:"+id));
         model.setName(updatedModel.getName());
          return modelRepository.save(model);
     }

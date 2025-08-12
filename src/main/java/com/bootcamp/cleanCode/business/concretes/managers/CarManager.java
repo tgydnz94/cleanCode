@@ -34,7 +34,7 @@ public class CarManager implements CarService {
     @Override
     public Car update(int id, Car updatedCar) {
         Car car = carRepository.findById(id)
-            .orElseThrow(()-> new RuntimeException("Brand not found with id:"+id));
+            .orElseThrow(()-> new RuntimeException("Car not found with id:"+id));
             car.setDailyPrice(updatedCar.getDailyPrice());
             car.setModel(updatedCar.getModel());
             car.setModelYear(updatedCar.getModelYear());
