@@ -2,7 +2,6 @@ package com.bootcamp.cleanCode.business.abstracts;
 
 import java.util.List;
 
-import com.bootcamp.cleanCode.entities.Brand;
 import com.bootcamp.cleanCode.entities.Fuel;
 
 public interface FuelService {
