@@ -23,7 +23,7 @@ import lombok.AllArgsConstructor;
 public class FuelsController {
     private FuelService fuelService;
 
-    @GetMapping("getall")
+    @GetMapping("/getall")
     public List<Fuel> getAll() {
         return fuelService.getAll();
     }

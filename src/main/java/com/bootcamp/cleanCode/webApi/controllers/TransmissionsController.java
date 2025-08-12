@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 public class TransmissionsController {
     private TransmissionService transmissionService;
 
-    @GetMapping("getall")
+    @GetMapping("/getall")
     public List<Transmission> getAll() {
         return transmissionService.getAll();
     }

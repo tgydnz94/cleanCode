@@ -35,7 +35,7 @@ public class TransmissionManager implements TransmissionService {
     @Override
     public Transmission update(int id, Transmission updatedTransmission) {
         Transmission transmission = transmissionRepository.findById(id)
-                        .orElseThrow(()-> new RuntimeException("Fuel not found with id:"+id));
+                        .orElseThrow(()-> new RuntimeException("Transmission not found with id:"+id));
         transmission.setName(updatedTransmission.getName());
          return transmissionRepository.save(transmission);
     }

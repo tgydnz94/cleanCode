@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import com.bootcamp.cleanCode.business.abstracts.CarService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.CarRepository;
 import com.bootcamp.cleanCode.entities.Car;
-
 import lombok.AllArgsConstructor;
+
 @Service
 @AllArgsConstructor
 public class CarManager implements CarService {
@@ -36,7 +36,7 @@ public class CarManager implements CarService {
         Car car = carRepository.findById(id)
             .orElseThrow(()-> new RuntimeException("Car not found with id:"+id));
             car.setDailyPrice(updatedCar.getDailyPrice());
-            car.setModel(updatedCar.getModel());
+            //car.setModel(updatedCar.getModel());
             car.setModelYear(updatedCar.getModelYear());
             car.setPlate(updatedCar.getPlate());
             car.setState(updatedCar.getState());
@@ -49,3 +49,4 @@ public class CarManager implements CarService {
     }
     
 }
+

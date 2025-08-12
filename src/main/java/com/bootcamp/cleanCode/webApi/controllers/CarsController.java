@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 public class CarsController {
     private CarService carService;
 
-    @GetMapping("getall")
+    @GetMapping("/getall")
     public List<Car> getAll() {
         return carService.getAll();
     }
@@ -51,3 +51,4 @@ public class CarsController {
     }
     
 }
+

@@ -27,7 +27,7 @@ public class Transmission {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "transmission")
-    List<Model> models;
+    /*@OneToMany(mappedBy = "transmission")
+    List<Model> models; */
     
 }

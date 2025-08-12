@@ -27,7 +27,8 @@ public class Fuel {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "fuel")
-    List<Model> models;
+    /*@OneToMany(mappedBy = "fuel")
+    List<Model> models; */
     
 }
+

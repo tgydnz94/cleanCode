@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import com.bootcamp.cleanCode.business.abstracts.FuelService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.FuelRepository;
 import com.bootcamp.cleanCode.entities.Fuel;
-
 import lombok.AllArgsConstructor;
+
 @Service
 @AllArgsConstructor
 public class FuelManager implements FuelService {
