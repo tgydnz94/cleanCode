@@ -1,7 +1,11 @@
 package com.bootcamp.cleanCode.entities;
 
+import com.bootcamp.cleanCode.entities.enums.CarState;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,12 +36,26 @@ public class Car {
     @Column(name = "modelYear")
     private int modelYear;
 
-    @Column(name = "state")
-    private int state;
+    /*@Column(name = "state")
+    private int state;*/
 
     /*@ManyToOne
     @JoinColumn(name = "model_id")
     private Model model; */
     
+    @ManyToOne
+    @JoinColumn(name= "model_id")
+    private Model model;
+
+    @ManyToOne
+    @JoinColumn(name = "fuel_id")
+    private Fuel fuel;
+
+    @ManyToOne
+    @JoinColumn(name = "transmission_id")
+    private Transmission transmission;
+
+    @Enumerated(EnumType.STRING)//string olarak açık şekilde veriye ulaşmak için
+    private CarState state;
 }
 
