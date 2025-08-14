@@ -1,10 +1,16 @@
 package com.bootcamp.cleanCode.business.concretes.managers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.bootcamp.cleanCode.business.abstracts.BrandService;
+import com.bootcamp.cleanCode.business.concretes.requests.brand.CreateBrandRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.brand.UpdateBrandRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.brand.GetAllBrandsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.brand.GetByIdBrandResponse;
+import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.BrandRepository;
 import com.bootcamp.cleanCode.entities.Brand;
 
@@ -13,30 +19,43 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class BrandManager implements BrandService {
     private BrandRepository brandRepository;
+    private ModelMapperService modelMapperService;
 
     @Override
-    public List<Brand> getAll() {
+    public List<GetAllBrandsResponse> getAll() {
         List<Brand> brands = brandRepository.findAll();
-        return brands;
+
+        List<GetAllBrandsResponse> brandsResponse = brands.stream()
+				.map(brand-> this.modelMapperService.forResponse()
+						.map(brand, GetAllBrandsResponse.class))
+				.collect(Collectors.toList());
+
+        return brandsResponse;
     }
 
     @Override
-    public void add(Brand brand) {
+    public void add(CreateBrandRequest createBrandRequest) {
+      Brand brand = this.modelMapperService.forRequest()
+				.map(createBrandRequest, Brand.class);
         this.brandRepository.save(brand);
     }
 
     @Override
-    public Brand getById(int id) {
+    public GetByIdBrandResponse getById(int id) {
         Brand brand = this.brandRepository.findById(id).orElseThrow();
-        return brand;
+
+        GetByIdBrandResponse response = this.modelMapperService.forResponse()
+				.map(brand, GetByIdBrandResponse.class);
+        return response;
     }
 
     @Override
-    public Brand update(int id, Brand updatedBrand) {
-        Brand brand = brandRepository.findById(id)
-                        .orElseThrow(()-> new RuntimeException("Brand not found with id:"+id));
-        brand.setName(updatedBrand.getName());
-         return brandRepository.save(brand);
+    public void update(UpdateBrandRequest updateBrandRequest) {
+
+         Brand brand = this.modelMapperService.forRequest()
+				.map(updateBrandRequest, Brand.class);
+		
+		this.brandRepository.save(brand);
     }
 
     @Override
