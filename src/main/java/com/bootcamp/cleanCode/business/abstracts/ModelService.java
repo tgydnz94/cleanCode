@@ -2,13 +2,16 @@ package com.bootcamp.cleanCode.business.abstracts;
 
 import java.util.List;
 
-import com.bootcamp.cleanCode.entities.Model;
+import com.bootcamp.cleanCode.business.concretes.requests.modelRequests.CreateModelRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.modelRequests.UpdateModelRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.modelResponses.GetAllModelsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.modelResponses.GetByIdModelResponse;
 
 public interface ModelService {
-    List<Model> getAll();
-    Model getById(int id);
-    void add(Model model);
-    Model update(int id, Model updatedModel);
+    List<GetAllModelsResponse> getAll();
+    GetByIdModelResponse getById(int id);
+    void add(CreateModelRequest createModelRequest);
+    void update(UpdateModelRequest updateModelRequest);
     void deleteById(int id);
     
 }

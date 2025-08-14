@@ -1,4 +1,4 @@
-package com.bootcamp.cleanCode.business.concretes.responses.brand;
+package com.bootcamp.cleanCode.business.concretes.responses.brandResponses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

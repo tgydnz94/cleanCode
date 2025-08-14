@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.bootcamp.cleanCode.business.abstracts.BrandService;
-import com.bootcamp.cleanCode.business.concretes.requests.brand.CreateBrandRequest;
-import com.bootcamp.cleanCode.business.concretes.requests.brand.UpdateBrandRequest;
-import com.bootcamp.cleanCode.business.concretes.responses.brand.GetAllBrandsResponse;
-import com.bootcamp.cleanCode.business.concretes.responses.brand.GetByIdBrandResponse;
+import com.bootcamp.cleanCode.business.concretes.requests.brandRequests.CreateBrandRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.brandRequests.UpdateBrandRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.brandResponses.GetAllBrandsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.brandResponses.GetByIdBrandResponse;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.BrandRepository;
 import com.bootcamp.cleanCode.entities.Brand;

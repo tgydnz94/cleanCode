@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.cleanCode.business.abstracts.BrandService;
-import com.bootcamp.cleanCode.business.concretes.requests.brand.CreateBrandRequest;
-import com.bootcamp.cleanCode.business.concretes.requests.brand.UpdateBrandRequest;
-import com.bootcamp.cleanCode.business.concretes.responses.brand.GetAllBrandsResponse;
-import com.bootcamp.cleanCode.business.concretes.responses.brand.GetByIdBrandResponse;
+import com.bootcamp.cleanCode.business.concretes.requests.brandRequests.CreateBrandRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.brandRequests.UpdateBrandRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.brandResponses.GetAllBrandsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.brandResponses.GetByIdBrandResponse;
 import com.bootcamp.cleanCode.entities.Brand;
 
 import jakarta.validation.Valid;

@@ -2,10 +2,10 @@ package com.bootcamp.cleanCode.business.abstracts;
 
 import java.util.List;
 
-import com.bootcamp.cleanCode.business.concretes.requests.brand.CreateBrandRequest;
-import com.bootcamp.cleanCode.business.concretes.requests.brand.UpdateBrandRequest;
-import com.bootcamp.cleanCode.business.concretes.responses.brand.GetAllBrandsResponse;
-import com.bootcamp.cleanCode.business.concretes.responses.brand.GetByIdBrandResponse;
+import com.bootcamp.cleanCode.business.concretes.requests.brandRequests.CreateBrandRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.brandRequests.UpdateBrandRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.brandResponses.GetAllBrandsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.brandResponses.GetByIdBrandResponse;
 
 public interface BrandService {
     List<GetAllBrandsResponse> getAll();

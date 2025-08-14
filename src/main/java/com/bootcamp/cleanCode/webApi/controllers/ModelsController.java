@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.cleanCode.business.abstracts.ModelService;
-import com.bootcamp.cleanCode.entities.Model;
-
+import com.bootcamp.cleanCode.business.concretes.requests.modelRequests.CreateModelRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.modelRequests.UpdateModelRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.modelResponses.GetAllModelsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.modelResponses.GetByIdModelResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/api/models")
@@ -24,24 +27,24 @@ public class ModelsController {
     private ModelService modelService;
 
     @GetMapping("getall")
-    public List<Model> getAll() {
+    public List<GetAllModelsResponse> getAll() {
         return modelService.getAll();
     }
 
     @GetMapping("/getbyid/{id}")
-    public Model getById(@PathVariable int id) {
+    public GetByIdModelResponse getById(@PathVariable int id) {
         return modelService.getById(id);
     }
 
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void add(@RequestBody() Model model) {
-        this.modelService.add(model);
+    public void add(@RequestBody() @Valid() CreateModelRequest createModelRequest) {
+        this.modelService.add(createModelRequest);
 
     }
-    @PutMapping("/update/{id}")
-    public Model updateModel(@PathVariable int id, @RequestBody() Model updatedModel){
-        return modelService.update(id, updatedModel);
+    @PutMapping("/update")
+    public void updateModel(@RequestBody() UpdateModelRequest updateModelRequest){
+        this.modelService.update(updateModelRequest);
     }
 
     @DeleteMapping("/delete/{id}")
