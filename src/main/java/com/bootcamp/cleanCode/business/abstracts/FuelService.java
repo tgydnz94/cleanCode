@@ -2,12 +2,15 @@ package com.bootcamp.cleanCode.business.abstracts;
 
 import java.util.List;
 
-import com.bootcamp.cleanCode.entities.Fuel;
+import com.bootcamp.cleanCode.business.concretes.requests.fuelRequests.CreateFuelRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.fuelRequests.UpdateFuelRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.fuelResponses.GetAllFuelsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.fuelResponses.GetByIdFuelResponse;
 
 public interface FuelService {
-    List<Fuel> getAll();
-    Fuel getById(int id);
-    void add(Fuel fuel);
-    Fuel update(int id, Fuel updatedFuel);
+    List<GetAllFuelsResponse> getAll();
+    GetByIdFuelResponse getById(int id);
+    void add(CreateFuelRequest createFuelRequest);
+    void update(UpdateFuelRequest updateFuelRequest);
     void deleteById(int id);
 }

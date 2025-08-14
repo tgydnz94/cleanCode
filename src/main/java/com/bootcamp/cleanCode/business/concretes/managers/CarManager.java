@@ -10,13 +10,9 @@ import com.bootcamp.cleanCode.business.concretes.requests.carRequests.CreateCarR
 import com.bootcamp.cleanCode.business.concretes.requests.carRequests.UpdateCarRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetAllCarsResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetByIdCarResponse;
-import com.bootcamp.cleanCode.business.concretes.responses.modelResponses.GetAllModelsResponse;
-import com.bootcamp.cleanCode.business.concretes.responses.modelResponses.GetByIdModelResponse;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.CarRepository;
 import com.bootcamp.cleanCode.entities.Car;
-import com.bootcamp.cleanCode.entities.Model;
-
 import lombok.AllArgsConstructor;
 
 @Service

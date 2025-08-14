@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.cleanCode.business.abstracts.FuelService;
-import com.bootcamp.cleanCode.entities.Fuel;
-
+import com.bootcamp.cleanCode.business.concretes.requests.fuelRequests.CreateFuelRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.fuelRequests.UpdateFuelRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.fuelResponses.GetAllFuelsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.fuelResponses.GetByIdFuelResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -24,24 +27,24 @@ public class FuelsController {
     private FuelService fuelService;
 
     @GetMapping("/getall")
-    public List<Fuel> getAll() {
+    public List<GetAllFuelsResponse> getAll() {
         return fuelService.getAll();
     }
 
     @GetMapping("/getbyid/{id}")
-    public Fuel getById(@PathVariable int id) {
+    public GetByIdFuelResponse getById(@PathVariable int id) {
         return fuelService.getById(id);
     }
 
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void add(@RequestBody() Fuel fuel) {
-        this.fuelService.add(fuel);
+    public void add(@RequestBody() @Valid() CreateFuelRequest createFuelRequest) {
+        this.fuelService.add(createFuelRequest);
 
     }
     @PutMapping("/update/{id}")
-    public Fuel updateFuel(@PathVariable int id, @RequestBody() Fuel updatedFuel){
-        return fuelService.update(id, updatedFuel);
+    public void updateFuel( @RequestBody() UpdateFuelRequest updateFuelRequest){
+        this.fuelService.update(updateFuelRequest);
     }
 
     @DeleteMapping("/delete/{id}")

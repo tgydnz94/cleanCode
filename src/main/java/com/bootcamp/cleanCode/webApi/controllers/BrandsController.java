@@ -18,8 +18,6 @@ import com.bootcamp.cleanCode.business.concretes.requests.brandRequests.CreateBr
 import com.bootcamp.cleanCode.business.concretes.requests.brandRequests.UpdateBrandRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.brandResponses.GetAllBrandsResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.brandResponses.GetByIdBrandResponse;
-import com.bootcamp.cleanCode.entities.Brand;
-
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 

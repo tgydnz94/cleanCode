@@ -18,8 +18,6 @@ import com.bootcamp.cleanCode.business.concretes.requests.carRequests.CreateCarR
 import com.bootcamp.cleanCode.business.concretes.requests.carRequests.UpdateCarRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetAllCarsResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetByIdCarResponse;
-import com.bootcamp.cleanCode.entities.Car;
-
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
