@@ -1,46 +1,60 @@
 package com.bootcamp.cleanCode.business.concretes.managers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.bootcamp.cleanCode.business.abstracts.CarService;
+import com.bootcamp.cleanCode.business.concretes.requests.carRequests.CreateCarRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.carRequests.UpdateCarRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetAllCarsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetByIdCarResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.modelResponses.GetAllModelsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.modelResponses.GetByIdModelResponse;
+import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.CarRepository;
 import com.bootcamp.cleanCode.entities.Car;
+import com.bootcamp.cleanCode.entities.Model;
+
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class CarManager implements CarService {
     private CarRepository carRepository;
+    private ModelMapperService modelMapperService;
 
     @Override
-    public List<Car> getAll() {
+    public List<GetAllCarsResponse> getAll() {
         List<Car> cars = carRepository.findAll();
-        return cars;
+        List<GetAllCarsResponse> carsResponse = cars.stream()
+				.map(car-> this.modelMapperService.forResponse()
+				.map(car, GetAllCarsResponse.class))
+				.collect(Collectors.toList());
+        return carsResponse;
     }
 
     @Override
-    public void add(Car car) {
+    public void add(CreateCarRequest createCarRequest) {
+        Car car = this.modelMapperService.forRequest()
+				.map(createCarRequest, Car.class);
         this.carRepository.save(car);
     }
 
     @Override
-    public Car getById(int id) {
+    public GetByIdCarResponse getById(int id) {
         Car car = this.carRepository.findById(id).orElseThrow();
-        return car;
+        GetByIdCarResponse response = this.modelMapperService.forResponse()
+				.map(car, GetByIdCarResponse.class);
+        return response;
     }
 
     @Override
-    public Car update(int id, Car updatedCar) {
-        Car car = carRepository.findById(id)
-            .orElseThrow(()-> new RuntimeException("Car not found with id:"+id));
-            car.setDailyPrice(updatedCar.getDailyPrice());
-            //car.setModel(updatedCar.getModel());
-            car.setModelYear(updatedCar.getModelYear());
-            car.setPlate(updatedCar.getPlate());
-            car.setState(updatedCar.getState());
-         return carRepository.save(car);
+    public void update(UpdateCarRequest updateCarRequest) {
+        Car car = this.modelMapperService.forRequest()
+				.map(updateCarRequest, Car.class);
+         this.carRepository.save(car);
     }
 
     @Override

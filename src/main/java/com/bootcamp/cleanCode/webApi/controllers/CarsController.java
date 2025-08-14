@@ -14,8 +14,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.cleanCode.business.abstracts.CarService;
+import com.bootcamp.cleanCode.business.concretes.requests.carRequests.CreateCarRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.carRequests.UpdateCarRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetAllCarsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetByIdCarResponse;
 import com.bootcamp.cleanCode.entities.Car;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -25,24 +30,24 @@ public class CarsController {
     private CarService carService;
 
     @GetMapping("/getall")
-    public List<Car> getAll() {
+    public List<GetAllCarsResponse> getAll() {
         return carService.getAll();
     }
 
     @GetMapping("/getbyid/{id}")
-    public Car getById(@PathVariable int id) {
+    public GetByIdCarResponse getById(@PathVariable int id) {
         return carService.getById(id);
     }
 
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void add(@RequestBody() Car car) {
-        this.carService.add(car);
+    public void add(@RequestBody() @Valid() CreateCarRequest createCarRequest) {
+        this.carService.add(createCarRequest);
 
     }
     @PutMapping("/update/{id}")
-    public Car updateCar(@PathVariable int id, @RequestBody() Car updatedCar){
-        return carService.update(id, updatedCar);
+    public void updateCar(@RequestBody() UpdateCarRequest updateCarRequest){
+        this.carService.update(updateCarRequest);
     }
 
     @DeleteMapping("/delete/{id}")
