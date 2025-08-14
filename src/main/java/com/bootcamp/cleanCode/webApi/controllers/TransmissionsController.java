@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.cleanCode.business.abstracts.TransmissionService;
-import com.bootcamp.cleanCode.entities.Transmission;
-
+import com.bootcamp.cleanCode.business.concretes.requests.transmissionRequests.CreateTransmissionRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.transmissionRequests.UpdateTransmissionRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.transmissionResponses.GetAllTransmissionsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.transmissionResponses.GetByIdTransmissionResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -25,24 +28,24 @@ public class TransmissionsController {
     private TransmissionService transmissionService;
 
     @GetMapping("/getall")
-    public List<Transmission> getAll() {
+    public List<GetAllTransmissionsResponse> getAll() {
         return transmissionService.getAll();
     }
 
     @GetMapping("/getbyid/{id}")
-    public Transmission getById(@PathVariable int id) {
+    public GetByIdTransmissionResponse getById(@PathVariable int id) {
         return transmissionService.getById(id);
     }
 
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void add(@RequestBody() Transmission transmission) {
-        this.transmissionService.add(transmission);
+    public void add(@RequestBody() @Valid() CreateTransmissionRequest createTransmissionRequest) {
+        this.transmissionService.add(createTransmissionRequest);
 
     }
-    @PutMapping("/update/{id}")
-    public Transmission updateTransmission(@PathVariable int id, @RequestBody() Transmission updatedTransmission){
-        return transmissionService.update(id, updatedTransmission);
+    @PutMapping("/update")
+    public void updateTransmission(@RequestBody() UpdateTransmissionRequest updateTransmissionRequest){
+        this.transmissionService.update(updateTransmissionRequest);
     }
 
     @DeleteMapping("/delete/{id}")

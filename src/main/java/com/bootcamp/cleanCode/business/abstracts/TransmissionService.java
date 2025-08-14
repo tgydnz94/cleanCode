@@ -2,12 +2,15 @@ package com.bootcamp.cleanCode.business.abstracts;
 
 import java.util.List;
 
-import com.bootcamp.cleanCode.entities.Transmission;
+import com.bootcamp.cleanCode.business.concretes.requests.transmissionRequests.CreateTransmissionRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.transmissionRequests.UpdateTransmissionRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.transmissionResponses.GetAllTransmissionsResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.transmissionResponses.GetByIdTransmissionResponse;
 
 public interface TransmissionService {
-    List<Transmission> getAll();
-    Transmission getById(int id);
-    void add(Transmission transmission);
-    Transmission update(int id, Transmission updatedTransmission);
+    List<GetAllTransmissionsResponse> getAll();
+    GetByIdTransmissionResponse getById(int id);
+    void add(CreateTransmissionRequest createTransmissionRequest);
+    void update(UpdateTransmissionRequest updateTransmissionRequest);
     void deleteById(int id);
 }
