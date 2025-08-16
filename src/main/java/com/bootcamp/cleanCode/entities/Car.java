@@ -57,5 +57,9 @@ public class Car {
 
     @Enumerated(EnumType.STRING)//string olarak açık şekilde veriye ulaşmak için
     private CarState state;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 }
 

@@ -1,0 +1,63 @@
+package com.bootcamp.cleanCode.business.concretes.managers;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import com.bootcamp.cleanCode.business.abstracts.CompanyService;
+import com.bootcamp.cleanCode.business.concretes.requests.companyRequests.CreateCompanyRequest;
+import com.bootcamp.cleanCode.business.concretes.requests.companyRequests.UpdateCompanyRequest;
+import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetByIdCarResponse;
+import com.bootcamp.cleanCode.business.concretes.responses.companyResponses.GetAllCompaniesResponses;
+import com.bootcamp.cleanCode.business.concretes.responses.companyResponses.GetByIdCompanyResponse;
+import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
+import com.bootcamp.cleanCode.dataAccess.abstracts.CompanyRepository;
+import com.bootcamp.cleanCode.entities.Car;
+import com.bootcamp.cleanCode.entities.Company;
+
+import lombok.AllArgsConstructor;
+@Service
+@AllArgsConstructor
+public class CompanyManager implements CompanyService{
+    private CompanyRepository companyRepository;
+    private ModelMapperService modelMapperService;
+
+    @Override
+    public List<GetAllCompaniesResponses> getAll() {
+        List<Company> companies = companyRepository.findAll();
+        List<GetAllCompaniesResponses> companiesResponse = companies.stream()
+				.map(company-> this.modelMapperService.forResponse()
+				.map(company, GetAllCompaniesResponses.class))
+				.collect(Collectors.toList());
+        return companiesResponse;
+    }
+
+    @Override
+    public GetByIdCompanyResponse getById(int id) {
+        Company company = this.companyRepository.findById(id).orElseThrow();
+        GetByIdCompanyResponse response = this.modelMapperService.forResponse()
+				.map(company, GetByIdCompanyResponse.class);
+        return response;
+    }
+
+    @Override
+    public void add(CreateCompanyRequest createCompanyRequest) {
+        Company company = this.modelMapperService.forRequest()
+				.map(createCompanyRequest, Company.class);
+        this.companyRepository.save(company);
+    }
+
+    @Override
+    public void update(UpdateCompanyRequest updateCompanyRequest) {
+        Company company = this.modelMapperService.forRequest()
+				.map(updateCompanyRequest, Company.class);
+         this.companyRepository.save(company);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        this.companyRepository.deleteById(id);
+    }
+    
+}
