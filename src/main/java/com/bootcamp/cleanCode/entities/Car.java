@@ -67,5 +67,8 @@ public class Car {
 
     @OneToMany(mappedBy = "car")
     List<Maintenance> maintenances;
+
+    @OneToMany(mappedBy = "car")
+    List<Rental> rentals;
 }
 
