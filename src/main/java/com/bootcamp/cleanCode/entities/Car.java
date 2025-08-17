@@ -1,5 +1,7 @@
 package com.bootcamp.cleanCode.entities;
 
+import java.util.List;
+
 import com.bootcamp.cleanCode.entities.enums.CarState;
 
 import jakarta.persistence.Column;
@@ -11,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -61,5 +64,8 @@ public class Car {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @OneToMany(mappedBy = "car")
+    List<Maintenance> maintenances;
 }
 
