@@ -8,12 +8,10 @@ import org.springframework.stereotype.Service;
 import com.bootcamp.cleanCode.business.abstracts.CompanyService;
 import com.bootcamp.cleanCode.business.concretes.requests.companyRequests.CreateCompanyRequest;
 import com.bootcamp.cleanCode.business.concretes.requests.companyRequests.UpdateCompanyRequest;
-import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetByIdCarResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.companyResponses.GetAllCompaniesResponses;
 import com.bootcamp.cleanCode.business.concretes.responses.companyResponses.GetByIdCompanyResponse;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.CompanyRepository;
-import com.bootcamp.cleanCode.entities.Car;
 import com.bootcamp.cleanCode.entities.Company;
 
 import lombok.AllArgsConstructor;
