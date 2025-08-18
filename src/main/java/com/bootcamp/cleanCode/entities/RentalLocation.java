@@ -1,53 +1,45 @@
 package com.bootcamp.cleanCode.entities;
 
+import java.time.LocalDateTime;
 
-import java.time.LocalDate;
-import java.util.List;
+import com.bootcamp.cleanCode.entities.enums.LocationType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.CascadeType;
 
-
-
-@Table(name = "rentals")
-@Entity
+@Table(name = "rentalLocations")
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Rental {
+public class RentalLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @Column(name = "rentDate")
-    private LocalDate rentDate;
-
-    @Column(name = "returnDate")
-    private LocalDate returnDate;
-
-    @Column(name = "totalPrice")
-    private double totalPrice;
+    @Enumerated(EnumType.STRING)
+    private LocationType type;
 
     @ManyToOne
-    @JoinColumn(name = "car_id")
-    private Car car;
+    @JoinColumn(name = "rental_id")
+    private Rental rental;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "location_id")
+    private Location location;
 
-    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
-    private List<RentalLocation> rentalLocations;
+    @Column(name = "timeStamp")
+    private LocalDateTime timeStamp;
 }
