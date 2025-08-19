@@ -10,6 +10,7 @@ import com.bootcamp.cleanCode.business.concretes.requests.brandRequests.CreateBr
 import com.bootcamp.cleanCode.business.concretes.requests.brandRequests.UpdateBrandRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.brandResponses.GetAllBrandsResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.brandResponses.GetByIdBrandResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.BrandBusinessRules;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.BrandRepository;
 import com.bootcamp.cleanCode.entities.Brand;
@@ -20,6 +21,7 @@ import lombok.AllArgsConstructor;
 public class BrandManager implements BrandService {
     private BrandRepository brandRepository;
     private ModelMapperService modelMapperService;
+    private BrandBusinessRules businessRules;
 
     @Override
     public List<GetAllBrandsResponse> getAll() {
@@ -35,6 +37,8 @@ public class BrandManager implements BrandService {
 
     @Override
     public void add(CreateBrandRequest createBrandRequest) {
+      businessRules.checkIfBrandNameExists(createBrandRequest.getName());
+
       Brand brand = this.modelMapperService.forRequest()
 				.map(createBrandRequest, Brand.class);
         this.brandRepository.save(brand);
@@ -42,6 +46,8 @@ public class BrandManager implements BrandService {
 
     @Override
     public GetByIdBrandResponse getById(int id) {
+      businessRules.checkIfBrandIdExists(id);
+
         Brand brand = this.brandRepository.findById(id).orElseThrow();
 
         GetByIdBrandResponse response = this.modelMapperService.forResponse()
@@ -51,6 +57,8 @@ public class BrandManager implements BrandService {
 
     @Override
     public void update(UpdateBrandRequest updateBrandRequest) {
+      businessRules.checkIfBrandIdExists(updateBrandRequest.getId());
+      businessRules.checkIfBrandNameExists(updateBrandRequest.getName());
 
          Brand brand = this.modelMapperService.forRequest()
 				.map(updateBrandRequest, Brand.class);
@@ -60,6 +68,8 @@ public class BrandManager implements BrandService {
 
     @Override
     public void deleteById(int id) {
+      businessRules.checkIfBrandIdExists(id);
+      
         this.brandRepository.deleteById(id);
     }
 
