@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -50,4 +51,10 @@ public class Rental {
 
     @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private List<RentalLocation> rentalLocations;
+
+    @OneToOne(mappedBy = "rental")
+    private CustomerInvoice customerInvoice;
+
+    @OneToOne(mappedBy = "rental")
+    private CompanyInvoice companyInvoice;
 }
