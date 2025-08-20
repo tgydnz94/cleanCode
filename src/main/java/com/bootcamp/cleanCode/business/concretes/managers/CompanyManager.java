@@ -10,6 +10,7 @@ import com.bootcamp.cleanCode.business.concretes.requests.companyRequests.Create
 import com.bootcamp.cleanCode.business.concretes.requests.companyRequests.UpdateCompanyRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.companyResponses.GetAllCompaniesResponses;
 import com.bootcamp.cleanCode.business.concretes.responses.companyResponses.GetByIdCompanyResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.CompanyBusinessRules;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.CompanyRepository;
 import com.bootcamp.cleanCode.entities.Company;
@@ -20,6 +21,7 @@ import lombok.AllArgsConstructor;
 public class CompanyManager implements CompanyService{
     private CompanyRepository companyRepository;
     private ModelMapperService modelMapperService;
+    private CompanyBusinessRules businessRules;
 
     @Override
     public List<GetAllCompaniesResponses> getAll() {
@@ -33,6 +35,8 @@ public class CompanyManager implements CompanyService{
 
     @Override
     public GetByIdCompanyResponse getById(int id) {
+      businessRules.checkIfCompanyExistsById(id);
+
         Company company = this.companyRepository.findById(id).orElseThrow();
         GetByIdCompanyResponse response = this.modelMapperService.forResponse()
 				.map(company, GetByIdCompanyResponse.class);
@@ -41,6 +45,9 @@ public class CompanyManager implements CompanyService{
 
     @Override
     public void add(CreateCompanyRequest createCompanyRequest) {
+      businessRules.checkIfEmailExists(createCompanyRequest.getEmail());
+      businessRules.checkIfPhoneExists(createCompanyRequest.getPhone());
+
         Company company = this.modelMapperService.forRequest()
 				.map(createCompanyRequest, Company.class);
         this.companyRepository.save(company);
@@ -48,6 +55,10 @@ public class CompanyManager implements CompanyService{
 
     @Override
     public void update(UpdateCompanyRequest updateCompanyRequest) {
+      businessRules.checkIfEmailExists(updateCompanyRequest.getEmail());
+      businessRules.checkIfPhoneExists(updateCompanyRequest.getPhone());
+      businessRules.checkIfCompanyExistsById(updateCompanyRequest.getId());
+
         Company company = this.modelMapperService.forRequest()
 				.map(updateCompanyRequest, Company.class);
          this.companyRepository.save(company);
