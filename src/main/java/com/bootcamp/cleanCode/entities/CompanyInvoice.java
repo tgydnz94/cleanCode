@@ -36,6 +36,9 @@ public class CompanyInvoice {
     @Column(name = "commissionAmount")
     private double commmissionAmount;
 
+    @Column(name = "netAmount")
+    private double netAmount;
+
     @OneToOne
     @JoinColumn(name = "rental_id")
     private Rental rental;

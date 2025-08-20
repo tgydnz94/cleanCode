@@ -14,4 +14,6 @@ public class GetAllCompanyInvoicesResponse {
     private LocalDate invoiceDate;
     private double totalAmount;
     private double commmissionAmount;
+    private double netAmount;
+    private int rentalId;
 }

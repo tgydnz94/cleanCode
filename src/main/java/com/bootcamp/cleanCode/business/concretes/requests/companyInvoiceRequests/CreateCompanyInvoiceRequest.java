@@ -1,7 +1,6 @@
 package com.bootcamp.cleanCode.business.concretes.requests.companyInvoiceRequests;
 
-import java.time.LocalDate;
-
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCompanyInvoiceRequest {
-    private LocalDate invoiceDate;
-    private double totalAmount;
-    private double commmissionAmount;
+    @NotNull
     private int rentalId;
 }

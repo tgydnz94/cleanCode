@@ -1,5 +1,6 @@
 package com.bootcamp.cleanCode.business.concretes.managers;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,16 +11,22 @@ import com.bootcamp.cleanCode.business.concretes.requests.companyInvoiceRequests
 import com.bootcamp.cleanCode.business.concretes.requests.companyInvoiceRequests.UpdateCompanyInvoiceRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.companyInvoiceResponses.GetAllCompanyInvoicesResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.companyInvoiceResponses.GetByIdCompanyInvoiceResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.CompanyInvoiceBusinessRules;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.CompanyInvoiceRepository;
+import com.bootcamp.cleanCode.dataAccess.abstracts.RentalRepository;
 import com.bootcamp.cleanCode.entities.CompanyInvoice;
+import com.bootcamp.cleanCode.entities.Rental;
+
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class CompanyInvoiceManager implements CompanyInvoiceService {
     private CompanyInvoiceRepository companyInvoiceRepository;
+    private RentalRepository rentalRepository;
     private ModelMapperService modelMapperService;
+    private CompanyInvoiceBusinessRules businessRules;
 
     @Override
     public List<GetAllCompanyInvoicesResponse> getAll() {
@@ -41,8 +48,22 @@ public class CompanyInvoiceManager implements CompanyInvoiceService {
 
     @Override
     public void add(CreateCompanyInvoiceRequest createCompanyInvoiceRequest) {
-        CompanyInvoice invoice = this.modelMapperService.forRequest()
-				.map(createCompanyInvoiceRequest, CompanyInvoice.class);
+      businessRules.checkIfRentalExists(createCompanyInvoiceRequest.getRentalId());
+      businessRules.checkIfInvoiceAlreadyExistsForRental(createCompanyInvoiceRequest.getRentalId());
+
+      Rental rental = rentalRepository.findById(createCompanyInvoiceRequest.getRentalId()).orElseThrow();
+
+      double total = rental.getTotalPrice();
+      double commission = total * 0.03;
+      double net = total - commission;
+
+        CompanyInvoice invoice = new CompanyInvoice();
+        invoice.setRental(rental);
+        invoice.setInvoiceDate(LocalDate.now());
+        invoice.setTotalAmount(total);
+        invoice.setCommmissionAmount(commission);
+        invoice.setNetAmount(net);
+
         this.companyInvoiceRepository.save(invoice);
     }
 
