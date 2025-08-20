@@ -16,5 +16,6 @@ public class GetAllCarsResponse {
     private String fuelName;
     private String transmissionName;
     private String state;
+    private String imageName;
     
 }

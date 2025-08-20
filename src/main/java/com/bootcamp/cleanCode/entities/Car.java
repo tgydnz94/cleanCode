@@ -39,6 +39,9 @@ public class Car {
     @Column(name = "modelYear")
     private int modelYear;
 
+    @Column(name = "imageName")
+    private String imageName;
+
     /*@Column(name = "state")
     private int state;*/
 

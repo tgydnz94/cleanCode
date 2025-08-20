@@ -4,15 +4,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bootcamp.cleanCode.business.abstracts.CarService;
 import com.bootcamp.cleanCode.business.concretes.requests.carRequests.CreateCarRequest;
 import com.bootcamp.cleanCode.business.concretes.requests.carRequests.UpdateCarRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetAllCarsResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetByIdCarResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.CarBusinessRules;
+import com.bootcamp.cleanCode.core.utilities.file.FileUploadService;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.CarRepository;
 import com.bootcamp.cleanCode.entities.Car;
+
 import lombok.AllArgsConstructor;
 
 @Service
@@ -20,6 +24,8 @@ import lombok.AllArgsConstructor;
 public class CarManager implements CarService {
     private CarRepository carRepository;
     private ModelMapperService modelMapperService;
+    private FileUploadService fileUploadService;
+    private CarBusinessRules businessRules;
 
     @Override
     public List<GetAllCarsResponse> getAll() {
@@ -33,6 +39,8 @@ public class CarManager implements CarService {
 
     @Override
     public void add(CreateCarRequest createCarRequest) {
+       businessRules.checkIfPlateExists(createCarRequest.getPlate());
+       businessRules.checkIfCompanyCarLimitExceeded(createCarRequest.getCompanyId());
         Car car = this.modelMapperService.forRequest()
 				.map(createCarRequest, Car.class);
         this.carRepository.save(car);
@@ -40,6 +48,8 @@ public class CarManager implements CarService {
 
     @Override
     public GetByIdCarResponse getById(int id) {
+      businessRules.checkIfCarIdExists(id);
+
         Car car = this.carRepository.findById(id).orElseThrow();
         GetByIdCarResponse response = this.modelMapperService.forResponse()
 				.map(car, GetByIdCarResponse.class);
@@ -48,6 +58,8 @@ public class CarManager implements CarService {
 
     @Override
     public void update(UpdateCarRequest updateCarRequest) {
+      businessRules.checkIfCarIdExists(updateCarRequest.getId());
+
         Car car = this.modelMapperService.forRequest()
 				.map(updateCarRequest, Car.class);
          this.carRepository.save(car);
@@ -56,6 +68,15 @@ public class CarManager implements CarService {
     @Override
     public void deleteById(int id) {
         this.carRepository.deleteById(id);
+    }
+
+    @Override
+    public void uploadCarImage(int carId, MultipartFile file) {
+      businessRules.checkIfCarIdExists(carId);
+
+      String imageName = fileUploadService.upload(file);
+
+      this.carRepository.uploadCarImage(carId, imageName);
     }
     
 }

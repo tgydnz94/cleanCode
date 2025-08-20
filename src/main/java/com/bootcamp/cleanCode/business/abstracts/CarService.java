@@ -2,6 +2,8 @@ package com.bootcamp.cleanCode.business.abstracts;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.bootcamp.cleanCode.business.concretes.requests.carRequests.CreateCarRequest;
 import com.bootcamp.cleanCode.business.concretes.requests.carRequests.UpdateCarRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetAllCarsResponse;
@@ -13,4 +15,5 @@ public interface CarService {
     void add(CreateCarRequest createCarRequest);
     void update(UpdateCarRequest updateCarRequest);
     void deleteById(int id);
+    void uploadCarImage(int carId, MultipartFile file);
 }
