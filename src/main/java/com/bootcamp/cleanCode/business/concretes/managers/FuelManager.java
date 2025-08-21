@@ -10,6 +10,7 @@ import com.bootcamp.cleanCode.business.concretes.requests.fuelRequests.CreateFue
 import com.bootcamp.cleanCode.business.concretes.requests.fuelRequests.UpdateFuelRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.fuelResponses.GetAllFuelsResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.fuelResponses.GetByIdFuelResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.FuelBusinessRules;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.FuelRepository;
 import com.bootcamp.cleanCode.entities.Fuel;
@@ -19,6 +20,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FuelManager implements FuelService {
     private FuelRepository fuelRepository;
+    private FuelBusinessRules businessRules;
     private ModelMapperService modelMapperService;
 
     @Override
@@ -34,6 +36,8 @@ public class FuelManager implements FuelService {
 
     @Override
     public void add(CreateFuelRequest createFuelRequest) {
+      businessRules.checkIfFuelNameExists(createFuelRequest.getName());
+      businessRules.checkIfFuelLimitExceeded();
         Fuel fuel = this.modelMapperService.forRequest()
 				.map(createFuelRequest, Fuel.class);
         this.fuelRepository.save(fuel);
@@ -41,6 +45,8 @@ public class FuelManager implements FuelService {
 
     @Override
     public GetByIdFuelResponse getById(int id) {
+      businessRules.checkIfFuelIdExists(id);
+      
         Fuel fuel = this.fuelRepository.findById(id).orElseThrow();
         GetByIdFuelResponse response = this.modelMapperService.forResponse()
 				.map(fuel, GetByIdFuelResponse.class);
@@ -49,6 +55,8 @@ public class FuelManager implements FuelService {
 
     @Override
     public void update(UpdateFuelRequest updateFuelRequest) {
+      businessRules.checkIfFuelIdExists(updateFuelRequest.getId());
+
         Fuel fuel = this.modelMapperService.forRequest()
 				.map(updateFuelRequest, Fuel.class);
          this.fuelRepository.save(fuel);

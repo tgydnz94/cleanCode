@@ -2,6 +2,7 @@ package com.bootcamp.cleanCode.business.concretes.requests.customerInvoiceReques
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCustomerInvoiceRequest {
-    private int id;
+    @NotNull
     private LocalDate invoiceDate;
-    private double amount;
+    @NotNull
     private int rentalId;
+    @NotNull
+    private String invoiceNumber;
 }

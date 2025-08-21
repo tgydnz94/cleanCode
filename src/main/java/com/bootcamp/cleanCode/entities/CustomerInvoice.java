@@ -26,6 +26,9 @@ public class CustomerInvoice {
     @Column(name = "id")
     private int id;
 
+    @Column(name = "invoiceNumber")
+    private String invoiceNumber;
+
     @Column(name = "invoiceDate")
     private LocalDate invoiceDate;
 

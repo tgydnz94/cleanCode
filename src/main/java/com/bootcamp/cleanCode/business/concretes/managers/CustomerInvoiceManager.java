@@ -10,9 +10,12 @@ import com.bootcamp.cleanCode.business.concretes.requests.customerInvoiceRequest
 import com.bootcamp.cleanCode.business.concretes.requests.customerInvoiceRequests.UpdateCUstomerInvoiceRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.customerInvoiceResponses.GetAllCustomerInvoicesResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.customerInvoiceResponses.GetByIdCustomerInvoiceResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.CustomerInvoiceBusinessRules;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.CustomerInvoiceRepository;
+import com.bootcamp.cleanCode.dataAccess.abstracts.RentalRepository;
 import com.bootcamp.cleanCode.entities.CustomerInvoice;
+import com.bootcamp.cleanCode.entities.Rental;
 
 import lombok.AllArgsConstructor;
 
@@ -20,6 +23,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CustomerInvoiceManager implements CustomerInvoiceService {
     private CustomerInvoiceRepository customerInvoiceRepository;
+    private CustomerInvoiceBusinessRules businessRules;
+    private RentalRepository rentalRepository;
     private ModelMapperService modelMapperService;
 
     @Override
@@ -42,8 +47,14 @@ public class CustomerInvoiceManager implements CustomerInvoiceService {
 
     @Override
     public void add(CreateCustomerInvoiceRequest createCustomerInvoiceRequest) {
+      businessRules.checkIfRentalExists(createCustomerInvoiceRequest.getRentalId());
+      businessRules.checkIfInvoiceAlreadyCreatedForRental(createCustomerInvoiceRequest.getRentalId());
+
+        Rental rental = rentalRepository.findById(createCustomerInvoiceRequest.getRentalId()).orElseThrow();
+
         CustomerInvoice invoice = this.modelMapperService.forRequest()
 				.map(createCustomerInvoiceRequest, CustomerInvoice.class);
+        invoice.setAmount(rental.getTotalPrice());
         this.customerInvoiceRepository.save(invoice);
     }
 
