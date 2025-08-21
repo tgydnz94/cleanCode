@@ -26,10 +26,25 @@ public class Payment {
     private int id;
 
     @Column(name = "paymentDate")
-    private LocalDate paymenDate;
+    private LocalDate paymentDate;
 
     @Column(name = "amount")
     private double amount;
+
+    @Column(name = "cardHolder")
+    private String cardHolder;
+
+    @Column(name = "cardNumber")
+    private String cardNumber;
+
+    @Column(name = "cardCvv")
+    private String cardCvv;
+
+    @Column(name = "cardExpiryMonth")
+    private String cardExpiryMonth;
+
+    @Column(name = "cardExpiryYear")
+    private String cardExpiryYear;
 
     @ManyToOne
     @JoinColumn(name = "rental_id")

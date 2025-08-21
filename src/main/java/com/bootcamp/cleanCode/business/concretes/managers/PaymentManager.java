@@ -1,5 +1,6 @@
 package com.bootcamp.cleanCode.business.concretes.managers;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,15 +11,21 @@ import com.bootcamp.cleanCode.business.concretes.requests.paymentRequests.Create
 import com.bootcamp.cleanCode.business.concretes.requests.paymentRequests.UpdatePaymentRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.paymentResponses.GetAllPaymentsResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.paymentResponses.GetByIdPaymentResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.PaymentBusinessRules;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.PaymentRepository;
+import com.bootcamp.cleanCode.dataAccess.abstracts.RentalRepository;
 import com.bootcamp.cleanCode.entities.Payment;
+import com.bootcamp.cleanCode.entities.Rental;
+
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class PaymentManager implements PaymentService {
     private PaymentRepository paymentRepository;
+    private RentalRepository rentalRepository;
+    private PaymentBusinessRules businessRules;
     private ModelMapperService modelMapperService;
     @Override
     public List<GetAllPaymentsResponse> getAll() {
@@ -38,8 +45,19 @@ public class PaymentManager implements PaymentService {
     }
     @Override
     public void add(CreatePaymentRequest createPaymentRequest) {
+        businessRules.checkIfRentalExists(createPaymentRequest.getRentalId());
+        businessRules.checkIfPaymentAlreadyExistsForRental(createPaymentRequest.getRentalId());
+        businessRules.validateCardExpiry(createPaymentRequest.getCardExpiryMonth(), createPaymentRequest.getCardExpiryYear());
+
+        Rental rental = rentalRepository.findById(createPaymentRequest.getRentalId()).orElseThrow();
+
         Payment payment = this.modelMapperService.forRequest()
 				.map(createPaymentRequest, Payment.class);
+
+        payment.setRental(rental);
+        payment.setAmount(rental.getTotalPrice());
+        payment.setPaymentDate(LocalDate.now());
+
         this.paymentRepository.save(payment);
     }
     @Override

@@ -13,8 +13,5 @@ public class GetByIdPaymentResponse {
     private int id;
     private LocalDate paymenDate;
     private double amount;
-    private LocalDate rentDate;
-    private LocalDate returnDate;
-    private String carModelName;
-    
+    private int rentalId;
 }
