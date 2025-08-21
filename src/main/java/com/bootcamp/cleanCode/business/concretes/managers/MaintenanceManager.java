@@ -10,14 +10,21 @@ import com.bootcamp.cleanCode.business.concretes.requests.maintenanceRequests.Cr
 import com.bootcamp.cleanCode.business.concretes.requests.maintenanceRequests.UpdateMaintenanceRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.maintenanceResponses.GetAllMaintenancesResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.maintenanceResponses.GetByIdMaintenanceResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.MaintenancesBusinessRules;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
+import com.bootcamp.cleanCode.dataAccess.abstracts.CarRepository;
 import com.bootcamp.cleanCode.dataAccess.abstracts.MaintenanceRepository;
+import com.bootcamp.cleanCode.entities.Car;
 import com.bootcamp.cleanCode.entities.Maintenance;
+import com.bootcamp.cleanCode.entities.enums.CarState;
+
 import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class MaintenanceManager implements MaintenanceService{
     private MaintenanceRepository maintenanceRepository;
+    private MaintenancesBusinessRules businessRules;
+    private CarRepository carRepository;
     private ModelMapperService modelMapperService;
 
     @Override
@@ -40,15 +47,37 @@ public class MaintenanceManager implements MaintenanceService{
 
     @Override
     public void add(CreateMaintenanceRequest createMaintenanceRequest) {
+        businessRules.checkIfCarExists(createMaintenanceRequest.getCarId());
+        businessRules.checkIfCarAlreadyInMaintenance(createMaintenanceRequest.getCarId());
+        businessRules.checkIfCarIsRented(createMaintenanceRequest.getCarId());
+        businessRules.validateDates(createMaintenanceRequest.getSentDate(), createMaintenanceRequest.getReturnDate());
+        
         Maintenance maintenance = this.modelMapperService.forRequest()
 				.map(createMaintenanceRequest, Maintenance.class);
+
+        // Aracın durumu Maintenance olarak güncellensin.
+        Car car = maintenance.getCar();
+        car.setState(CarState.MAINTENANCE);
+        carRepository.save(car);
+
         this.maintenanceRepository.save(maintenance);
     }
 
     @Override
     public void update(UpdateMaintenanceRequest updateMaintenanceRequest) {
+        businessRules.checkIfMaintenanceExists(updateMaintenanceRequest.getId());
+        businessRules.checkIfCarExists(updateMaintenanceRequest.getCarId());
+        businessRules.validateDates(updateMaintenanceRequest.getSentDate(), updateMaintenanceRequest.getReturnDate());
+
         Maintenance maintenance = this.modelMapperService.forRequest()
 				.map(updateMaintenanceRequest, Maintenance.class);
+
+        //bakımdan dönen aracı available yap
+        if (updateMaintenanceRequest.getReturnDate() != null) {
+        Car car = maintenance.getCar();
+        car.setState(CarState.AVAILABLE);
+        carRepository.save(car);
+        }
          this.maintenanceRepository.save(maintenance);
     }
 
