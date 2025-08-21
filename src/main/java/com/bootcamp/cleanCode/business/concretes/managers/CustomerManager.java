@@ -10,6 +10,7 @@ import com.bootcamp.cleanCode.business.concretes.requests.customerRequests.Creat
 import com.bootcamp.cleanCode.business.concretes.requests.customerRequests.UpdateCustomerRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.customerResponses.GetAllCustomersResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.customerResponses.GetByIdCustomerResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.CustomerBusinessRules;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.CustomerRepository;
 import com.bootcamp.cleanCode.entities.Customer;
@@ -19,6 +20,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CustomerManager implements CustomerService{
     private CustomerRepository customerRepository;
+    private CustomerBusinessRules businessRules;
     private ModelMapperService modelMapperService;
 
     @Override
@@ -33,6 +35,8 @@ public class CustomerManager implements CustomerService{
 
     @Override
     public GetByIdCustomerResponse getById(int id) {
+        businessRules.checkIfCustomerExists(id);
+
         Customer customer = this.customerRepository.findById(id).orElseThrow();
         GetByIdCustomerResponse response = this.modelMapperService.forResponse()
 				.map(customer, GetByIdCustomerResponse.class);
@@ -41,6 +45,8 @@ public class CustomerManager implements CustomerService{
 
     @Override
     public void add(CreateCustomerRequest createCustomerRequest) {
+      businessRules.checkIfEmailExists(createCustomerRequest.getEmail());
+
         Customer customer = this.modelMapperService.forRequest()
 				.map(createCustomerRequest, Customer.class);
         this.customerRepository.save(customer);
@@ -48,6 +54,8 @@ public class CustomerManager implements CustomerService{
 
     @Override
     public void update(UpdateCustomerRequest updateCustomerRequest) {
+      businessRules.checkIfCustomerExists(updateCustomerRequest.getId());
+
         Customer customer = this.modelMapperService.forRequest()
 				.map(updateCustomerRequest, Customer.class);
          this.customerRepository.save(customer);
