@@ -10,7 +10,9 @@ import com.bootcamp.cleanCode.business.concretes.requests.modelRequests.CreateMo
 import com.bootcamp.cleanCode.business.concretes.requests.modelRequests.UpdateModelRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.modelResponses.GetAllModelsResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.modelResponses.GetByIdModelResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.ModelBusinessRules;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
+import com.bootcamp.cleanCode.dataAccess.abstracts.BrandRepository;
 import com.bootcamp.cleanCode.dataAccess.abstracts.ModelRepository;
 import com.bootcamp.cleanCode.entities.Model;
 
@@ -19,6 +21,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ModelManager implements ModelService {
     private ModelRepository modelRepository;
+    private BrandRepository brandRepository;
+    private ModelBusinessRules businessRules;
     private ModelMapperService modelMapperService;
 
         @Override
@@ -34,6 +38,9 @@ public class ModelManager implements ModelService {
 
     @Override
     public void add(CreateModelRequest createModelRequest) {
+      businessRules.checkIfModelNameExists(createModelRequest.getName());
+      businessRules.checkIfBrandExists(createModelRequest.getBrandId());
+
         Model model = this.modelMapperService.forRequest()
 				.map(createModelRequest, Model.class);
 
@@ -42,6 +49,8 @@ public class ModelManager implements ModelService {
 
     @Override
     public GetByIdModelResponse getById(int id) {
+      businessRules.checkIfModelExistsById(id);
+      
         Model model = this.modelRepository.findById(id).orElseThrow();
         GetByIdModelResponse response = this.modelMapperService.forResponse()
 				.map(model, GetByIdModelResponse.class);
@@ -50,6 +59,8 @@ public class ModelManager implements ModelService {
 
     @Override
     public void update(UpdateModelRequest updateModelRequest) {
+      businessRules.checkIfModelExistsById(updateModelRequest.getId());
+      businessRules.checkIfBrandExists(updateModelRequest.getBrandId());
        Model model = this.modelMapperService.forRequest()
 				.map(updateModelRequest, Model.class);
 		
