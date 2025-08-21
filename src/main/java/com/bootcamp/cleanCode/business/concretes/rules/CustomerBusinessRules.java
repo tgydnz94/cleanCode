@@ -1,8 +1,15 @@
 package com.bootcamp.cleanCode.business.concretes.rules;
 
+import org.springframework.stereotype.Service;
+
 import com.bootcamp.cleanCode.core.utilities.exceptions.BusinessException;
 import com.bootcamp.cleanCode.dataAccess.abstracts.CustomerRepository;
 
+import lombok.AllArgsConstructor;
+
+
+@Service
+@AllArgsConstructor
 public class CustomerBusinessRules {
     private CustomerRepository customerRepository;
 
