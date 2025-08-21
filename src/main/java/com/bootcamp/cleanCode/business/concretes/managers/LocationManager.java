@@ -10,6 +10,7 @@ import com.bootcamp.cleanCode.business.concretes.requests.locationRequests.Creat
 import com.bootcamp.cleanCode.business.concretes.requests.locationRequests.UpdateLocationRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.locationResponses.GetAllLocationsResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.locationResponses.GetByIdLocationResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.LocationBusinessRules;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.LocationRepository;
 import com.bootcamp.cleanCode.entities.Location;
@@ -19,6 +20,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class LocationManager implements LocationService {
     private LocationRepository locationRepository;
+    private LocationBusinessRules businessRules;
     private ModelMapperService modelMapperService;
 
     @Override
@@ -33,6 +35,8 @@ public class LocationManager implements LocationService {
 
     @Override
     public GetByIdLocationResponse getById(int id) {
+        businessRules.checkIfLocationExists(id);
+
         Location location = this.locationRepository.findById(id).orElseThrow();
         GetByIdLocationResponse response = this.modelMapperService.forResponse()
 				.map(location, GetByIdLocationResponse.class);
@@ -48,6 +52,8 @@ public class LocationManager implements LocationService {
 
     @Override
     public void update(UpdateLocationRequest updateLocationRequest) {
+        businessRules.checkIfLocationExists(updateLocationRequest.getId());
+        
         Location location = this.modelMapperService.forRequest()
 				.map(updateLocationRequest, Location.class);
          this.locationRepository.save(location);
