@@ -44,6 +44,8 @@ public class ModelManager implements ModelService {
         Model model = this.modelMapperService.forRequest()
 				.map(createModelRequest, Model.class);
 
+        model.setBrand(brandRepository.findById(createModelRequest.getBrandId()).orElseThrow());
+
         this.modelRepository.save(model);
     }
 
