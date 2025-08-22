@@ -10,6 +10,7 @@ import com.bootcamp.cleanCode.business.concretes.requests.transmissionRequests.C
 import com.bootcamp.cleanCode.business.concretes.requests.transmissionRequests.UpdateTransmissionRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.transmissionResponses.GetAllTransmissionsResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.transmissionResponses.GetByIdTransmissionResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.TransmissionBusinessRules;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.TransmissionRepository;
 import com.bootcamp.cleanCode.entities.Transmission;
@@ -20,6 +21,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class TransmissionManager implements TransmissionService {
     private TransmissionRepository transmissionRepository;
+    private TransmissionBusinessRules businessRules;
     private ModelMapperService modelMapperService;
 
     @Override
@@ -35,6 +37,9 @@ public class TransmissionManager implements TransmissionService {
 
     @Override
     public void add(CreateTransmissionRequest createTransmissionRequest) {
+      businessRules.checkIfTransmissionNameExist(createTransmissionRequest.getName());
+      businessRules.checkIfLimitExceeded();
+      
         Transmission transmission = this.modelMapperService.forRequest()
 				.map(createTransmissionRequest, Transmission.class);
         this.transmissionRepository.save(transmission);
