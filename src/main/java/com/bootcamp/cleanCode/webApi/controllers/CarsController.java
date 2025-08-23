@@ -47,13 +47,17 @@ public class CarsController {
 
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void add(@RequestBody() @Valid() CreateCarRequest createCarRequest) {
-        this.carService.add(createCarRequest);
+    public void add(@RequestBody() @Valid() CreateCarRequest createCarRequest,
+    @RequestParam("images") List<MultipartFile> images) throws IOException {
+        this.carService.add(createCarRequest,images);
 
     }
     @PutMapping("/update/{id}")
-    public void updateCar(@RequestBody() UpdateCarRequest updateCarRequest){
-        this.carService.update(updateCarRequest);
+    public void updateCar(@PathVariable("id") int id,
+    @RequestBody() UpdateCarRequest updateCarRequest,
+     @RequestParam("images") List<MultipartFile> images) throws IOException{
+        updateCarRequest.setId(id);
+        this.carService.update(updateCarRequest,images);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -61,12 +65,6 @@ public class CarsController {
         this.carService.deleteById(id);
     }
 
-    @PostMapping("/upload-image")
-    public ResponseEntity<String> uploadImage(@RequestParam int carId, @RequestParam MultipartFile file){
-        carService.uploadCarImage(carId, file);
-
-        return ResponseEntity.ok("Fotoğraf başarıyla yüklendi.");
-    }
 
     @GetMapping("/image/{fileName}")
     public ResponseEntity<byte[]> getCarImage(@PathVariable String fileName) {
@@ -89,6 +87,11 @@ public class CarsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 
         }
+    }
+
+    @DeleteMapping("/delete-image/{carId}/{imageId}")
+    public void deleteCarImage(@PathVariable int carId, @PathVariable int imageId) throws IOException{
+    carService.deleteImage(carId, imageId);
     }
     
 }

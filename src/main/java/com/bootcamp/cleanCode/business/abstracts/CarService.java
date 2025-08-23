@@ -1,5 +1,6 @@
 package com.bootcamp.cleanCode.business.abstracts;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -12,8 +13,8 @@ import com.bootcamp.cleanCode.business.concretes.responses.carResponses.GetByIdC
 public interface CarService {
     List<GetAllCarsResponse> getAll();
     GetByIdCarResponse getById(int id);
-    void add(CreateCarRequest createCarRequest);
-    void update(UpdateCarRequest updateCarRequest);
+    void add(CreateCarRequest createCarRequest, List<MultipartFile> images) throws IOException;
+    void update(UpdateCarRequest updateCarRequest, List<MultipartFile> images) throws IOException;
     void deleteById(int id);
-    void uploadCarImage(int carId, MultipartFile file);
+    void deleteImage(int carId, int imageId) throws IOException;
 }

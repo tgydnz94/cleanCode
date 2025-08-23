@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bootcamp.cleanCode.entities.enums.CarState;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,8 +40,8 @@ public class Car {
     @Column(name = "modelYear")
     private int modelYear;
 
-    @Column(name = "imageName")
-    private String imageName;
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    private List<CarImage> carImages;
 
     /*@Column(name = "state")
     private int state;*/
