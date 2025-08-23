@@ -1,6 +1,6 @@
 package com.bootcamp.cleanCode.business.concretes.requests.rentalLocationRequests;
 
-import java.time.LocalDateTime;
+import com.bootcamp.cleanCode.entities.enums.LocationType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateRentalLocationRequest {
-    private int id;
-    private String locationType;
-    private int rentalId;
+    private LocationType locationType;
     private int locaitonId;
-    private LocalDateTime timeStamp;
+
 }

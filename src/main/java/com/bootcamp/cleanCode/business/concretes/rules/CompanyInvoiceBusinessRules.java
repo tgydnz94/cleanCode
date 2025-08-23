@@ -15,7 +15,7 @@ public class CompanyInvoiceBusinessRules {
 
     public void checkIfRentalExists(int rentalId) {
         if(!rentalRepository.existsById(rentalId)){
-            throw new RuntimeException("Kiralama işlemi olmadığından fatura oluşturma işlemi başarısız.");
+            throw new RuntimeException("Kiralama kaydı bulunamadı, fatura oluşturulamaz.");
         }
 
     }

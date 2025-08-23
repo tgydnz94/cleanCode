@@ -16,7 +16,7 @@ public class CustomerInvoiceBusinessRules {
 
     public void checkIfRentalExists(int rentalId) {
         if (!rentalRepository.existsById(rentalId)) {
-            throw new BusinessException("Kiralama bilgisi bulunamadı.");
+            throw new BusinessException("Kiralama kaydı bulunamadı.");
         }
     }
 

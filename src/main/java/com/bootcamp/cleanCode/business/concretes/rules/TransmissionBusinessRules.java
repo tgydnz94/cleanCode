@@ -17,4 +17,11 @@ public class TransmissionBusinessRules {
         }
 
     }
+
+    public void checkIfLimitExceeded() {
+        long count = transmissionRepository.count();
+        if(count>=3) {
+            throw new RuntimeException("En fazla iki vites türü girilebilir.");
+        }
+    }
 }

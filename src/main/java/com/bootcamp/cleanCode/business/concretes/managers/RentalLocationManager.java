@@ -1,5 +1,6 @@
 package com.bootcamp.cleanCode.business.concretes.managers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,8 +11,11 @@ import com.bootcamp.cleanCode.business.concretes.requests.rentalLocationRequests
 import com.bootcamp.cleanCode.business.concretes.requests.rentalLocationRequests.UpdateRentalLocationRequest;
 import com.bootcamp.cleanCode.business.concretes.responses.rentalLocationResponses.GetAllRentalLocationsResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.rentalLocationResponses.GetByIdRentalLocationResponse;
+import com.bootcamp.cleanCode.business.concretes.rules.RentalLocationBusinessRules;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.RentalLocationRepository;
+import com.bootcamp.cleanCode.entities.Location;
+import com.bootcamp.cleanCode.entities.Rental;
 import com.bootcamp.cleanCode.entities.RentalLocation;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +24,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RentalLocationManager implements RentalLocationService {
     private RentalLocationRepository rentalLocationRepository;
+    private RentalLocationBusinessRules businessRules;
     private ModelMapperService modelMapperService;
     
     @Override
@@ -42,16 +47,39 @@ public class RentalLocationManager implements RentalLocationService {
 
     @Override
     public void add(CreateRentalLocationRequest createRentalLocationRequest) {
-        RentalLocation location = this.modelMapperService.forRequest()
+      businessRules.checkIfLocationExistsById(createRentalLocationRequest.getLocaitonId());
+
+        RentalLocation rentalLocation = this.modelMapperService.forRequest()
 				.map(createRentalLocationRequest, RentalLocation.class);
-        this.rentalLocationRepository.save(location);
+
+        Rental rental = new Rental();
+        rentalLocation.setRental(rental);
+
+        Location location = new Location(); 
+        rentalLocation.setLocation(location);
+
+
+        rentalLocation.setTimeStamp(LocalDateTime.now());
+        this.rentalLocationRepository.save(rentalLocation);
     }
 
     @Override
     public void update(UpdateRentalLocationRequest updateRentalLocationRequest) {
-        RentalLocation location = this.modelMapperService.forRequest()
+      businessRules.checkIfLocationExistsById(updateRentalLocationRequest.getLocaitonId());
+
+        RentalLocation rentalLocation = this.modelMapperService.forRequest()
 				.map(updateRentalLocationRequest, RentalLocation.class);
-         this.rentalLocationRepository.save(location);
+
+        Rental rental = new Rental();
+        rentalLocation.setRental(rental);
+
+        Location location = new Location();
+        rentalLocation.setLocation(location);
+
+        rentalLocation.setTimeStamp(LocalDateTime.now());
+        
+
+         this.rentalLocationRepository.save(rentalLocation);
     }
 
     @Override
