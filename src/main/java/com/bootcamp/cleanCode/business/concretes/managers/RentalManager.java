@@ -71,7 +71,7 @@ public class RentalManager implements RentalService{
         Rental rental = this.modelMapperService.forRequest()
 				.map(createRentalRequest, Rental.class);
 
-        double days = ChronoUnit.DAYS.between(createRentalRequest.getRentDate(), createRentalRequest.getRentDate());
+        double days = ChronoUnit.DAYS.between(createRentalRequest.getRentDate(), createRentalRequest.getReturnDate());
         double totalPrice = carRepository.findById(createRentalRequest.getCarId())
                             .get().getDailyPrice() * days;
         

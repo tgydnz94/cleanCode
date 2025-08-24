@@ -12,8 +12,11 @@ import com.bootcamp.cleanCode.business.concretes.requests.rentalLocationRequests
 import com.bootcamp.cleanCode.business.concretes.responses.rentalLocationResponses.GetAllRentalLocationsResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.rentalLocationResponses.GetByIdRentalLocationResponse;
 import com.bootcamp.cleanCode.business.concretes.rules.RentalLocationBusinessRules;
+import com.bootcamp.cleanCode.core.utilities.exceptions.BusinessException;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
+import com.bootcamp.cleanCode.dataAccess.abstracts.LocationRepository;
 import com.bootcamp.cleanCode.dataAccess.abstracts.RentalLocationRepository;
+import com.bootcamp.cleanCode.dataAccess.abstracts.RentalRepository;
 import com.bootcamp.cleanCode.entities.Location;
 import com.bootcamp.cleanCode.entities.Rental;
 import com.bootcamp.cleanCode.entities.RentalLocation;
@@ -25,6 +28,8 @@ import lombok.AllArgsConstructor;
 public class RentalLocationManager implements RentalLocationService {
     private RentalLocationRepository rentalLocationRepository;
     private RentalLocationBusinessRules businessRules;
+    private RentalRepository rentalRepository;
+    private LocationRepository locationRepository;
     private ModelMapperService modelMapperService;
     
     @Override
@@ -47,16 +52,21 @@ public class RentalLocationManager implements RentalLocationService {
 
     @Override
     public void add(CreateRentalLocationRequest createRentalLocationRequest) {
-      businessRules.checkIfLocationExistsById(createRentalLocationRequest.getLocaitonId());
+      businessRules.checkIfLocationExistsById(createRentalLocationRequest.getLocationId());
+      businessRules.checkIfRentalExistsById(createRentalLocationRequest.getRentalId());
+
+      Rental rental = rentalRepository.findById(createRentalLocationRequest.getRentalId())
+      .orElseThrow(() -> new BusinessException("Kiralama bulunamadı."));
+
+      Location location = locationRepository.findById(createRentalLocationRequest.getLocationId())
+      .orElseThrow(() -> new BusinessException("Lokasyon bulunamadı."));
 
         RentalLocation rentalLocation = this.modelMapperService.forRequest()
 				.map(createRentalLocationRequest, RentalLocation.class);
 
-        Rental rental = new Rental();
         rentalLocation.setRental(rental);
-
-        Location location = new Location(); 
         rentalLocation.setLocation(location);
+
 
 
         rentalLocation.setTimeStamp(LocalDateTime.now());
@@ -65,16 +75,21 @@ public class RentalLocationManager implements RentalLocationService {
 
     @Override
     public void update(UpdateRentalLocationRequest updateRentalLocationRequest) {
-      businessRules.checkIfLocationExistsById(updateRentalLocationRequest.getLocaitonId());
+      businessRules.checkIfLocationExistsById(updateRentalLocationRequest.getLocationId());
+      businessRules.checkIfRentalExistsById(updateRentalLocationRequest.getRentalId());
+
+      Rental rental = rentalRepository.findById(updateRentalLocationRequest.getRentalId())
+      .orElseThrow(() -> new BusinessException("Kiralama bulunamadı."));
+
+      Location location = locationRepository.findById(updateRentalLocationRequest.getLocationId())
+      .orElseThrow(() -> new BusinessException("Lokasyon bulunamadı."));
 
         RentalLocation rentalLocation = this.modelMapperService.forRequest()
 				.map(updateRentalLocationRequest, RentalLocation.class);
 
-        Rental rental = new Rental();
         rentalLocation.setRental(rental);
-
-        Location location = new Location();
         rentalLocation.setLocation(location);
+
 
         rentalLocation.setTimeStamp(LocalDateTime.now());
         

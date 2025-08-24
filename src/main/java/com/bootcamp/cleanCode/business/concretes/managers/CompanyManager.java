@@ -11,9 +11,12 @@ import com.bootcamp.cleanCode.business.concretes.requests.companyRequests.Update
 import com.bootcamp.cleanCode.business.concretes.responses.companyResponses.GetAllCompaniesResponses;
 import com.bootcamp.cleanCode.business.concretes.responses.companyResponses.GetByIdCompanyResponse;
 import com.bootcamp.cleanCode.business.concretes.rules.CompanyBusinessRules;
+import com.bootcamp.cleanCode.core.utilities.exceptions.BusinessException;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.CompanyRepository;
+import com.bootcamp.cleanCode.dataAccess.abstracts.RoleRepository;
 import com.bootcamp.cleanCode.entities.Company;
+import com.bootcamp.cleanCode.entities.Role;
 
 import lombok.AllArgsConstructor;
 @Service
@@ -21,6 +24,7 @@ import lombok.AllArgsConstructor;
 public class CompanyManager implements CompanyService{
     private CompanyRepository companyRepository;
     private ModelMapperService modelMapperService;
+    private RoleRepository roleRepository;
     private CompanyBusinessRules businessRules;
 
     @Override
@@ -47,9 +51,12 @@ public class CompanyManager implements CompanyService{
     public void add(CreateCompanyRequest createCompanyRequest) {
       businessRules.checkIfEmailExists(createCompanyRequest.getEmail());
       businessRules.checkIfPhoneExists(createCompanyRequest.getPhone());
+      Role companyRole = roleRepository.findByName("COMPANY")
+            .orElseThrow(() -> new BusinessException("Rol bulunamadı"));
 
         Company company = this.modelMapperService.forRequest()
 				.map(createCompanyRequest, Company.class);
+        company.setRole(companyRole);
         this.companyRepository.save(company);
     }
 

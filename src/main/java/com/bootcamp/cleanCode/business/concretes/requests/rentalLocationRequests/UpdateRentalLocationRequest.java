@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateRentalLocationRequest {
 private LocationType locationType;
-    private int locaitonId;
+    private int locationId;
+    private int rentalId;
 }

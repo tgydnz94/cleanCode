@@ -11,9 +11,13 @@ import com.bootcamp.cleanCode.business.concretes.requests.customerRequests.Updat
 import com.bootcamp.cleanCode.business.concretes.responses.customerResponses.GetAllCustomersResponse;
 import com.bootcamp.cleanCode.business.concretes.responses.customerResponses.GetByIdCustomerResponse;
 import com.bootcamp.cleanCode.business.concretes.rules.CustomerBusinessRules;
+import com.bootcamp.cleanCode.core.utilities.exceptions.BusinessException;
 import com.bootcamp.cleanCode.core.utilities.mappers.ModelMapperService;
 import com.bootcamp.cleanCode.dataAccess.abstracts.CustomerRepository;
+import com.bootcamp.cleanCode.dataAccess.abstracts.RoleRepository;
 import com.bootcamp.cleanCode.entities.Customer;
+import com.bootcamp.cleanCode.entities.Role;
+
 import lombok.AllArgsConstructor;
 
 @Service
@@ -21,6 +25,7 @@ import lombok.AllArgsConstructor;
 public class CustomerManager implements CustomerService{
     private CustomerRepository customerRepository;
     private CustomerBusinessRules businessRules;
+    private RoleRepository roleRepository;
     private ModelMapperService modelMapperService;
 
     @Override
@@ -46,6 +51,8 @@ public class CustomerManager implements CustomerService{
     @Override
     public void add(CreateCustomerRequest createCustomerRequest) {
       businessRules.checkIfEmailExists(createCustomerRequest.getEmail());
+      Role userRole = roleRepository.findByName("USER")
+            .orElseThrow(() -> new BusinessException("Rol bulunamadı"));
 
         Customer customer = this.modelMapperService.forRequest()
 				.map(createCustomerRequest, Customer.class);
