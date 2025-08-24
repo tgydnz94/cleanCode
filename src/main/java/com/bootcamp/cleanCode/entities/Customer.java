@@ -41,6 +41,9 @@ public class Customer {
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
+    @Column(name = "password")
+    private String password;
+
     @OneToMany(mappedBy = "customer")
     List<Rental> rentals;
 

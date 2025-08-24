@@ -3,6 +3,7 @@ package com.bootcamp.cleanCode.business.concretes.managers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bootcamp.cleanCode.business.abstracts.CustomerService;
@@ -26,6 +27,7 @@ public class CustomerManager implements CustomerService{
     private CustomerRepository customerRepository;
     private CustomerBusinessRules businessRules;
     private RoleRepository roleRepository;
+    private PasswordEncoder passwordEncoder;
     private ModelMapperService modelMapperService;
 
     @Override
@@ -56,6 +58,9 @@ public class CustomerManager implements CustomerService{
 
         Customer customer = this.modelMapperService.forRequest()
 				.map(createCustomerRequest, Customer.class);
+        customer.setRole(userRole);
+
+        customer.setPassword(passwordEncoder.encode(createCustomerRequest.getPassword()));
         this.customerRepository.save(customer);
     }
 

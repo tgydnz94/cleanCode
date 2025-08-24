@@ -3,6 +3,7 @@ package com.bootcamp.cleanCode.business.concretes.managers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bootcamp.cleanCode.business.abstracts.CompanyService;
@@ -25,6 +26,7 @@ public class CompanyManager implements CompanyService{
     private CompanyRepository companyRepository;
     private ModelMapperService modelMapperService;
     private RoleRepository roleRepository;
+    private PasswordEncoder passwordEncoder;
     private CompanyBusinessRules businessRules;
 
     @Override
@@ -57,6 +59,8 @@ public class CompanyManager implements CompanyService{
         Company company = this.modelMapperService.forRequest()
 				.map(createCompanyRequest, Company.class);
         company.setRole(companyRole);
+
+        company.setPassword(passwordEncoder.encode(createCompanyRequest.getPassword()));
         this.companyRepository.save(company);
     }
 

@@ -21,5 +21,8 @@ public class CreateCompanyRequest {
     @Size(min = 10, max = 10)
     private String phone;
 
+    @NotBlank
+    private String password;
+
     
 }

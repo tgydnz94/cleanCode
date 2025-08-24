@@ -23,6 +23,8 @@ public class UpdateCompanyRequest {
     @NotBlank
     @Size(min = 10, max = 10)
     private String phone;
+    @NotBlank
+    private String password;
 
     
 }

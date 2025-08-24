@@ -34,6 +34,9 @@ public class Company {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "password")
+    private String password;
+
     @OneToMany(mappedBy = "company")
     private List<Car> cars;
 
