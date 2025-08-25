@@ -3,6 +3,7 @@ package com.bootcamp.cleanCode.webApi.controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,17 +38,21 @@ public class TransmissionsController {
         return transmissionService.getById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
     public void add(@RequestBody() @Valid() CreateTransmissionRequest createTransmissionRequest) {
         this.transmissionService.add(createTransmissionRequest);
 
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update")
     public void updateTransmission(@RequestBody() UpdateTransmissionRequest updateTransmissionRequest){
         this.transmissionService.update(updateTransmissionRequest);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable int id) {
         this.transmissionService.deleteById(id);

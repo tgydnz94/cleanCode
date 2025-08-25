@@ -6,5 +6,6 @@ import com.bootcamp.cleanCode.entities.CustomerInvoice;
 
 public interface CustomerInvoiceRepository extends JpaRepository<CustomerInvoice, Integer> {
     boolean existsByRentalId(int rentalId);
+
     
 }

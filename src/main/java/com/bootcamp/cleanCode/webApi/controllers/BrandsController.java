@@ -3,6 +3,7 @@ package com.bootcamp.cleanCode.webApi.controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import lombok.AllArgsConstructor;
 public class BrandsController {
     private BrandService brandService;
 
+
     @GetMapping("getall")
     public List<GetAllBrandsResponse> getAll() {
         return brandService.getAll();
@@ -37,17 +39,21 @@ public class BrandsController {
         return brandService.getById(id);
     }
 
+    @PreAuthorize("hasRole('COMPANY')")
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
     public void add(@RequestBody() @Valid() CreateBrandRequest createBrandRequest) {
         this.brandService.add(createBrandRequest);
 
     }
+
+    @PreAuthorize("hasAnyRole('COMPANY','ADMIN')")
     @PutMapping("/update")
     public void updateBrand(@RequestBody() UpdateBrandRequest updateBrandRequest){
         this.brandService.update(updateBrandRequest);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable int id) {
         this.brandService.deleteById(id);

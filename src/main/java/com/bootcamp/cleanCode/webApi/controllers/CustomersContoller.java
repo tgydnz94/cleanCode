@@ -3,6 +3,7 @@ package com.bootcamp.cleanCode.webApi.controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,11 +29,13 @@ import lombok.AllArgsConstructor;
 public class CustomersContoller {
     private CustomerService customerService;
 
+    @PreAuthorize("hasRole('ADMIN')")
      @GetMapping("/getall")
     public List<GetAllCustomersResponse> getAll() {
         return customerService.getAll();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getbyid/{id}")
     public GetByIdCustomerResponse getById(@PathVariable int id) {
         return customerService.getById(id);
@@ -44,11 +47,14 @@ public class CustomersContoller {
         this.customerService.add(createCustomerRequest);
 
     }
+
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/update/{id}")
     public void updateCar(@RequestBody() UpdateCustomerRequest updateCustomerRequest){
         this.customerService.update(updateCustomerRequest);
     }
 
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable int id) {
         this.customerService.deleteById(id);

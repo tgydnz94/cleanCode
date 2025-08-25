@@ -1,6 +1,6 @@
 package com.bootcamp.cleanCode.entities;
 
-import java.time.LocalDate;
+import com.bootcamp.cleanCode.entities.userBase.UserBase;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,40 +14,42 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table(name = "payments")
+@Table(name = "workers")
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Payment {
+public class Worker implements UserBase  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @Column(name = "paymentDate")
-    private LocalDate paymentDate;
+    @Column(name = "firstName")
+    private String name;
 
-    @Column(name = "amount")
-    private double amount;
+    @Column(name = "lastName")
+    private String lastName;
 
-    @Column(name = "cardHolder")
-    private String cardHolder;
+    @Column(name = "position")
+    private String position;
 
-    @Column(name = "cardNumber")
-    private String cardNumber;
+    @Column(name = "email")
+    private String email;
 
-    @Column(name = "cardCvv")
-    private String cardCvv;
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
 
-    @Column(name = "cardExpiryMonth")
-    private String cardExpiryMonth;
-
-    @Column(name = "cardExpiryYear")
-    private String cardExpiryYear;
+    @Column(name = "password")
+    private String password;
 
     @ManyToOne
-    @JoinColumn(name = "rental_id")
-    private Rental rental;
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @Override
+    public String getName() {
+        return name;
+    }
     
 }

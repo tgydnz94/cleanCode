@@ -36,7 +36,7 @@ public class RolesController {
         return roleService.getById(id);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public void add(@RequestBody @Valid CreateRoleRequest createRoleRequest) {
         roleService.add(createRoleRequest);

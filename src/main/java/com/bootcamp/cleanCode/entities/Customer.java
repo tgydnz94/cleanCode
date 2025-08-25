@@ -2,6 +2,8 @@ package com.bootcamp.cleanCode.entities;
 
 import java.util.List;
 
+import com.bootcamp.cleanCode.entities.userBase.UserBase;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,14 +22,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
+public class Customer implements UserBase  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
     @Column(name = "firstName")
-    private String firstName;
+    private String name;
 
     @Column(name = "lastName")
     private String lastName;

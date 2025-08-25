@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +46,7 @@ public class CarsController {
         return carService.getById(id);
     }
 
+    @PreAuthorize("hasRole('COMPANY')")
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
     public void add(@RequestBody() @Valid() CreateCarRequest createCarRequest,
@@ -52,6 +54,8 @@ public class CarsController {
         this.carService.add(createCarRequest,images);
 
     }
+
+    @PreAuthorize("hasRole('COMPANY')")
     @PutMapping("/update/{id}")
     public void updateCar(@PathVariable("id") int id,
     @RequestBody() UpdateCarRequest updateCarRequest,
@@ -60,6 +64,7 @@ public class CarsController {
         this.carService.update(updateCarRequest,images);
     }
 
+    @PreAuthorize("hasRole('COMPANY')")
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable int id) {
         this.carService.deleteById(id);
@@ -89,6 +94,7 @@ public class CarsController {
         }
     }
 
+    @PreAuthorize("hasRole('COMPANY')")
     @DeleteMapping("/delete-image/{carId}/{imageId}")
     public void deleteCarImage(@PathVariable int carId, @PathVariable int imageId) throws IOException{
     carService.deleteImage(carId, imageId);

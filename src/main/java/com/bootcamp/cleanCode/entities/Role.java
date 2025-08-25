@@ -32,4 +32,7 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     private List<Company> companies;
+
+    @OneToMany(mappedBy = "role")
+    private List<Worker> workers;
 }

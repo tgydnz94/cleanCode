@@ -3,6 +3,7 @@ package com.bootcamp.cleanCode.webApi.controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,17 +39,21 @@ public class CustomerInvoicesController {
         return invoiceService.getById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
     public void add(@RequestBody() @Valid() CreateCustomerInvoiceRequest createRequest) {
         this.invoiceService.add(createRequest);
 
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update")
     public void updateBrand(@RequestBody() UpdateCUstomerInvoiceRequest updateRequest){
         this.invoiceService.update(updateRequest);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable int id) {
         this.invoiceService.deleteById(id);
